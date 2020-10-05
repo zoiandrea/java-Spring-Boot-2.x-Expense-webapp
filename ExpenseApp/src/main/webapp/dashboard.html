@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+	<head>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ExpenseApp - Dashboard</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/expenseapp.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+		<script src="js/popper.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/datatables.min.js"></script>
+    <script src="js/dashboard.js"></script>
+	</head>
+	<body>
+   	<header>
+    	<nav class="mb-1 navbar navbar-expand-lg navbar-dark fixed-top shadow rounded" style="background-color:#808080;">
+      	<a class="navbar-brand" href="#">ExpenseApp</a>
+        	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          	<span class="navbar-toggler-icon"></span>
+        	</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+						<ul class="navbar-nav ml-auto nav-flex-icons">
+					  	<li class="nav-item dropdown">
+						  	<a class="nav-link dropdown-toggle" href="#" id="userProfileMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						   		<span id="loginUser"></span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="userProfileMenuLink">
+									<a class="dropdown-item" href="#" onClick="logout()">Logout</a>
+								</div>
+							</li>
+				    </ul>
+			   </div>
+         </nav>
+      </header>
+			<main role="main" class="container main-container">
+				<div class="col-12 col-container">
+					<div class="card container-card">
+						<div class="card-header">Projects</div>
+						<div class="card-body">
+							<div class="table-responsive list-table">
+								<table id="projectList" class="table table-sm table-striped table-bordered" style="width:100%;text-align:center;">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Title</th>
+											<th scope="col">Expense</th>
+											<th scope="col">Duration</th>
+											<th scope="col">Created By</th>
+											<th scope="col">Creation Date</th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<!-- Add Project Modal -->
+			<div class="modal fade" id="projectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  			<div class="modal-dialog" role="document">
+					<form class="needs-validation" id="projectForm">
+						<input type="hidden" id="proId" name="id">
+    				<div class="modal-content">
+      				<div class="modal-header">
+        				<h5 class="modal-title" id="staticBackdropLabel">Add Project</h5>
+        				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          				<span aria-hidden="true">&times;</span>
+        				</button>
+      				</div>
+      				<div class="modal-body">
+								<div class="container-fluid">
+    							<div class="form-group row">
+										<label for="title" class="col-3 col-form-label col-form-label-sm">Title:</label>
+										<div class="col-9">
+											<input type="text" id="title" name="title" class="form-control form-control-sm" placeholder="Project Title" required>
+										</div>
+    							</div>
+									<div class="form-group row">
+										<label for="description" class="col-3 col-form-label col-form-label-sm">Description:</label>
+										<div class="col-9">
+											<textarea class="form-control form-control-sm" id="description" name="description" rows="2" placeholder="Project Description" required></textarea>
+										</div>
+    							</div>
+									<div class="form-group row">
+										<label for="expense" class="col-3 col-form-label col-form-label-sm">Expense:</label>
+										<div class="col-9 input-group input-group-sm">
+											<div class="input-group-prepend"><span class="input-group-text">&#36;</span></div>
+											<input type="number" id="expense" name="expense" class="form-control" required>
+										</div>
+    							</div>
+									<div class="form-group row">
+										<label for="duration" class="col-3 col-form-label col-form-label-sm">Duration:</label>
+										<div class="col-9 input-group input-group-sm">
+											<input type="duration" id="duration" name="duration" class="form-control" required>
+											<div class="input-group-append"><span class="input-group-text">Days</span></div>
+										</div>
+    							</div>
+  							</div>
+      				</div>
+      				<div class="modal-footer">
+        				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        				<button type="submit" class="btn btn-primary">Save</button>
+      				</div>
+    				</div>
+					</form>
+  			</div>
+			</div>
+			<!-- View Project Modal -->
+			<div class="modal fade" id="projectModalView" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticLabel" aria-hidden="true">
+  			<div class="modal-dialog" role="document">
+    				<div class="modal-content">
+      				<div class="modal-header">
+        				<h5 class="modal-title" id="staticLabel">Add Project</h5>
+        				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          				<span aria-hidden="true">&times;</span>
+        				</button>
+      				</div>
+      				<div class="modal-body">
+								<div class="container-fluid">
+    							<div class="row">
+										<label class="col-4 col-form-label col-form-label-sm font-weight-bold">Title:</label>
+										<label id="titleValue" class="col-8 col-form-label col-form-label-sm"></label>
+    							</div>
+									<div class="row">
+										<label class="col-4 col-form-label col-form-label-sm font-weight-bold">Description:</label>
+										<label id="descriptionValue" class="col-8 col-form-label col-form-label-sm"></label>
+    							</div>
+									<div class="row">
+										<label class="col-4 col-form-label col-form-label-sm font-weight-bold">Expense:</label>
+										<label id="expenseValue" class="col-8 col-form-label col-form-label-sm"></label>
+    							</div>
+									<div class="row">
+										<label class="col-4 col-form-label col-form-label-sm font-weight-bold">Duration:</label>
+										<label id="durationValue" class="col-8 col-form-label col-form-label-sm"></label>
+    							</div>
+									<div class="row">
+										<label class="col-4 col-form-label col-form-label-sm font-weight-bold">Created By:</label>
+										<label id="createdbyValue" class="col-8 col-form-label col-form-label-sm"></label>
+    							</div>
+									<div class="row">
+										<label class="col-4 col-form-label col-form-label-sm font-weight-bold">Creation Date:</label>
+										<label id="creationValue" class="col-8 col-form-label col-form-label-sm"></label>
+    							</div>
+  							</div>
+      				</div>
+      				<div class="modal-footer">
+        				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      				</div>
+    				</div>
+  			</div>
+			</div>
+			<!-- Alert Modal -->
+   		<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-hidden="true">
+  			<div class="modal-dialog modal-sm modal-dialog-centered">
+      		<div class="modal-content">
+        		<div class="modal-header">
+          		<h5 id="alertModalTitle" class="modal-title">Message</h5>
+          		<button id="alertModalCloseButton" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            		<span aria-hidden="true">&times;</span>
+            	</button>
+          	</div>
+       	  	<div id="alertModalBody" class="modal-body"></div>
+          		<div id="alertModalFooter" class="modal-footer">
+            		<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+            	</div>
+        	</div>
+       	</div>
+   		</div>
+    	<footer class="footer">
+        <div class="container">
+            <span class="text-muted">ExpenseApp</span>
+        </div>
+    	</footer>
+	</body>
+</html>
